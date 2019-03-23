@@ -1,16 +1,13 @@
 import sys
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from preferences import Preferences
-from hellowindow import HelloWindow
-
 
 # Creates tray icon and tray options
 class TrayIcon(QApplication):
 
-    def __init__(self):
+    def __init__(self, icon):
         super().__init__([])
-        self.icon = QIcon("logo-white.png")
+        self.icon = QIcon(icon)
         self.tray = QSystemTrayIcon()
         self.tray.setIcon(self.icon)
         self.tray.setVisible(True)
