@@ -8,7 +8,7 @@ from Foundation import NSUserDefaults
 # info["LSBackgroundOnly"] = "1"
 
 # Detects if OSX is in dark mode to choose icon color
-mode = NSUserDefaults.standardUserDefaults().stringForKey_('AppleInterfaceStyle')
+mode=NSUserDefaults.standardUserDefaults().stringForKey_('AppleInterfaceStyle')
 
 if mode == "Dark":
     icon = "logo-white.png"
@@ -20,4 +20,4 @@ app = TrayIcon(icon)
 app.exec_()
 app.setQuitOnLastWindowClosed(False)
 
-sys.exit(app.exec())
+sys.exit(app.exec_())

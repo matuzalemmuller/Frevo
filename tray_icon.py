@@ -1,6 +1,8 @@
 import sys
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+from PyQt5 import QtCore
+from preferences import Preferences
 
 # Creates tray icon and tray options
 class TrayIcon(QApplication):
@@ -15,7 +17,7 @@ class TrayIcon(QApplication):
         # Creates menu and button actions
         self.menu = QMenu()
 
-        self.action1 = QAction("Test")
+        self.action1 = QAction("Preferences")
         self.menu.addAction(self.action1)
         self.action1.triggered.connect(self._configure)
 
@@ -25,9 +27,9 @@ class TrayIcon(QApplication):
 
         self.tray.setContextMenu(self.menu)
 
-
+    @QtCore.pyqtSlot()
     def _configure(self):
-        print("Test")
+        Preferences()
 
     def _exit(self):
         sys.exit(0)
