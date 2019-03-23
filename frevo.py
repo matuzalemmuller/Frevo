@@ -11,9 +11,9 @@ from Foundation import NSUserDefaults
 mode=NSUserDefaults.standardUserDefaults().stringForKey_('AppleInterfaceStyle')
 
 if mode == "Dark":
-    icon = "logo-white.png"
+    icon = "icon/logo-white.png"
 else:
-    icon = "logo-black.png"
+    icon = "icon/logo-black.png"
 
 # Creates tray icon
 app = TrayIcon(icon)
