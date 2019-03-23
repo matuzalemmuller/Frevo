@@ -17,13 +17,13 @@ class TrayIcon(QApplication):
         # Creates menu and button actions
         self.menu = QMenu()
 
-        self.action1 = QAction("Preferences")
-        self.menu.addAction(self.action1)
-        self.action1.triggered.connect(self._configure)
+        self.preferenceAction = QAction("Preferences")
+        self.menu.addAction(self.preferenceAction)
+        self.preferenceAction.triggered.connect(self._configure)
 
-        self.action2 = QAction("Quit")
-        self.menu.addAction(self.action2)
-        self.action2.triggered.connect(self._exit)
+        self.quitAction = QAction("Quit")
+        self.menu.addAction(self.quitAction)
+        self.quitAction.triggered.connect(self._exit)
 
         self.tray.setContextMenu(self.menu)
 
