@@ -49,7 +49,6 @@ class TrayIcon(QApplication):
         
         self.menu.addAction(self.preferenceAction)
         self.menu.addAction(self.quitAction)
-        
 
 
     def _exit(self):
