@@ -1,11 +1,11 @@
 class FileHandler():
     def __init__(self):
-        self.file = "commands.txt"
+        self._file = "commands.txt"
 
     
     def read_commands(self):
         try:
-            text_file = open(self.file, 'r')
+            text_file = open(self._file, 'r')
             command = text_file.readline()
             text_file.close()
             return command
@@ -16,7 +16,7 @@ class FileHandler():
 
     def save_command(self, command):
         try:
-            text_file = open("commands.txt", 'w+')
+            text_file = open(self._file, 'w+')
             text_file.write(command)
             text_file.close()
             return True
