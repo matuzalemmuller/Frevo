@@ -1,6 +1,5 @@
 import sys
 from PyQt5.QtWidgets import *
-from PyQt5 import QtGui, QtCore
 from file_handler import FileHandler
 
 
