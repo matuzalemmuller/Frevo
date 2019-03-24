@@ -1,8 +1,10 @@
 import sys
+from appscript import *
+from PyQt5 import QtCore
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from PyQt5 import QtCore
 from preferences import Preferences
+from file_handler import FileHandler
 
 # Creates tray icon and tray options
 class TrayIcon(QApplication):
@@ -16,20 +18,43 @@ class TrayIcon(QApplication):
 
         # Creates menu and button actions
         self.menu = QMenu()
-
-        self.action1 = QAction("Preferences")
-        self.menu.addAction(self.action1)
-        self.action1.triggered.connect(self._configure)
-
-        self.action2 = QAction("Quit")
-        self.menu.addAction(self.action2)
-        self.action2.triggered.connect(self._exit)
+        self.commandAction = QAction("Run command")
+        self.commandAction.triggered.connect(self._run_command)
+        self.preferenceAction = QAction("Preferences")
+        self.preferenceAction.triggered.connect(self._configure)
+        self.quitAction = QAction("Quit")
+        self.quitAction.triggered.connect(self._exit)
+        self._refresh_UI()
 
         self.tray.setContextMenu(self.menu)
 
+
     @QtCore.pyqtSlot()
     def _configure(self):
-        Preferences()
+        Preferences(self)
+
+
+    def _run_command(self):
+        command = FileHandler().read_commands()
+        terminal = app('Terminal')
+        terminal.launch()
+        terminal.activate()
+        terminal.do_script(command)
+
+
+    def _refresh_UI(self):
+        self.menu.clear()
+        if FileHandler().read_commands():
+            self.menu.addAction(self.commandAction)
+            self.menu.addSeparator()
+        else:
+            if 'commandAction' in locals():
+                if self.commandAction:
+                    self.menu.removeAction(self.commandAction)
+        
+        self.menu.addAction(self.preferenceAction)
+        self.menu.addAction(self.quitAction)
+
 
     def _exit(self):
         sys.exit(0)
