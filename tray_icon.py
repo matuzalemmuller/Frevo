@@ -1,4 +1,5 @@
 import sys
+import os
 from appscript import *
 from PyQt5 import QtCore
 from PyQt5.QtGui import *
@@ -24,25 +25,31 @@ class TrayIcon(QApplication):
         self._preferenceAction.triggered.connect(self._configure)
         self._quitAction = QAction("Quit")
         self._quitAction.triggered.connect(self._exit)
+        
         self.refresh_UI()
-
         self._tray.setContextMenu(self._menu)
 
 
+    # Launches Preferences when "Preferences" is selected in sys tray
     @QtCore.pyqtSlot()
     def _configure(self):
         Preferences(self)
 
 
-    def run_command(self, command=None):
-        if command == None:
-            command = FileHandler().read_commands()
-        terminal = app('Terminal')
-        terminal.launch()
-        terminal.activate()
-        terminal.do_script(command)
+    # Runs command when "Run command" is selected in sys tray
+    def run_command(self, command=None, terminal=True):
+        if command == None or command == False:
+            terminal, command = FileHandler().read_commands()
+        if terminal == True:
+            terminal = app('Terminal')
+            terminal.launch()
+            terminal.activate()
+            terminal.do_script(command)
+        else:
+            os.system(command)
 
 
+    # Refreshes sys tray options
     def refresh_UI(self):
         self._menu.clear()
         if FileHandler().read_commands():
@@ -57,5 +64,6 @@ class TrayIcon(QApplication):
         self._menu.addAction(self._quitAction)
 
 
+    # Closes app when "Quit" is selected in sys tray
     def _exit(self):
         sys.exit(0)

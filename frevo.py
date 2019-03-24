@@ -9,7 +9,6 @@ from Foundation import NSUserDefaults
 
 # Detects if OSX is in dark mode to choose icon color
 mode=NSUserDefaults.standardUserDefaults().stringForKey_('AppleInterfaceStyle')
-
 if mode == "Dark":
     icon = "icon/logo-white.png"
 else:
