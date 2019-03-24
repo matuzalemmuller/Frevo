@@ -1,4 +1,5 @@
 import sys
+from appscript import *
 from PyQt5 import QtCore
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -34,7 +35,11 @@ class TrayIcon(QApplication):
 
 
     def _run_command(self):
-        pass
+        command = FileHandler().read_commands()
+        terminal = app('Terminal')
+        terminal.launch()
+        terminal.activate()
+        terminal.do_script(command)
 
 
     def _refresh_UI(self):
