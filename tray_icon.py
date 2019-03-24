@@ -6,6 +6,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from preferences import Preferences
 from file_handler import FileHandler
+from about import About
 
 # Creates tray icon and tray options
 class TrayIcon(QApplication):
@@ -23,6 +24,8 @@ class TrayIcon(QApplication):
         self._commandAction.triggered.connect(self.run_command)
         self._preferenceAction = QAction("Preferences")
         self._preferenceAction.triggered.connect(self._configure)
+        self._aboutAction = QAction("About")
+        self._aboutAction.triggered.connect(self._about)
         self._quitAction = QAction("Quit")
         self._quitAction.triggered.connect(self._exit)
         
@@ -36,10 +39,18 @@ class TrayIcon(QApplication):
         Preferences(self)
 
 
+   # Launches Preferences when "Preferences" is selected in sys tray
+    @QtCore.pyqtSlot()
+    def _about(self):
+        About()
+
+
     # Runs command when "Run command" is selected in sys tray
     def run_command(self, command=None, terminal=True):
         if command == None or command == False:
             terminal, command = FileHandler().read_commands()
+            if command == "":
+                return
         if terminal == True:
             terminal = app('Terminal')
             terminal.launch()
@@ -61,6 +72,7 @@ class TrayIcon(QApplication):
                     self._menu.removeAction(self._commandAction)
         
         self._menu.addAction(self._preferenceAction)
+        self._menu.addAction(self._aboutAction)
         self._menu.addAction(self._quitAction)
 
 
