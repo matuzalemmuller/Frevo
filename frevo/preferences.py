@@ -1,7 +1,7 @@
 import sys
 import re
 from PyQt5.QtWidgets import *
-from file_handler import FileHandler
+from file_handler import ConfigHandler
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
@@ -86,20 +86,19 @@ class Preferences(QDialog):
     # Save button action
     def _save_command(self):
         if re.search('[a-zA-Z]', self._commandTextbox.text()):
-            if FileHandler().save_command(self._nameTextbox.text(),
+            if ConfigHandler().save_command(self._nameTextbox.text(),
                                         self._terminalCheckbox.isChecked(),
                                         self._commandTextbox.text()):
                 self._tray.refresh_UI()
-                self.close()
         else:
-            if FileHandler().save_command("",True,""):
+            if ConfigHandler().save_command("",True,""):
                 self._tray.refresh_UI()
-                self.close()
+        self.close()
 
 
     # Read commands from commands file
     def _read_command(self):
-        name, terminal, command = FileHandler().read_commands()
+        name, terminal, command = ConfigHandler().read_commands()
         return name, terminal, command
     
 
