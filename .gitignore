@@ -1,6 +1,6 @@
 env
 __pycache__
 run.sh
-settings.json
 .DS_Store
 commands.txt
+.vscode
