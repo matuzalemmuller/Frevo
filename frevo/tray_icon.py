@@ -5,7 +5,7 @@ from PyQt5 import QtCore
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from preferences import Preferences
-from file_handler import FileHandler
+from file_handler import ConfigHandler
 from about import About
 
 # Creates tray icon and tray options
@@ -48,7 +48,7 @@ class TrayIcon(QApplication):
     # Runs command when "Run command" is selected in sys tray
     def run_command(self, command=None, terminal=True):
         if command == None or command == False:
-            name, terminal, command = FileHandler().read_commands()
+            name, terminal, command = ConfigHandler().read_commands()
             if name == None and terminal == None and command == None:
                 return
         if terminal == True:
@@ -63,7 +63,7 @@ class TrayIcon(QApplication):
     # Refreshes sys tray options
     def refresh_UI(self):
         self._menu.clear()
-        name, terminal, command = FileHandler().read_commands()
+        name, terminal, command = ConfigHandler().read_commands()
         if name == None and terminal == None and command == None:
             if '_commandAction' in locals():
                 if self._commandAction:
