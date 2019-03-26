@@ -4,3 +4,6 @@ run.sh
 .DS_Store
 commands.txt
 .vscode
+config
+build
+dist
