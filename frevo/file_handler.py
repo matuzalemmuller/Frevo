@@ -1,7 +1,16 @@
+import os
+import sys
+
 # Save and read commands from commands file
-class FileHandler():
+class ConfigHandler():
     def __init__(self):
-        self._file = "commands.txt"
+        self._file = self.resourcePath("config/commands.txt")
+        try:
+            os.mkdir(self._file.rsplit('/',1)[0])
+            config_file = open(self._file, 'w+')
+            config_file.close()
+        except:
+            pass
 
     
     # Reads command from commands file
@@ -36,4 +45,20 @@ class FileHandler():
             return True
         except IOError as e:
             print(e)
+            return False
+    
+
+    # Handles path when running as an .app
+    def resourcePath(self,relative_path):
+        if hasattr(sys, '_MEIPASS'):
+            return os.path.join(sys._MEIPASS, relative_path)
+        return os.path.join(os.path.abspath('.'), relative_path)
+    
+
+
+    # Determines whether frevo is running as code or app
+    def isApp(self):
+        if hasattr(sys, '_MEIPASS'):
+            return True
+        else:
             return False
