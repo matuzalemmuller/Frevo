@@ -1,7 +1,9 @@
 import sys
+import re
 from PyQt5.QtWidgets import *
 from file_handler import FileHandler
-
+from PyQt5 import QtGui
+from PyQt5 import QtCore
 
 # Manages Preferences window
 class Preferences(QDialog):
@@ -9,17 +11,27 @@ class Preferences(QDialog):
     def __init__(self, tray):
         super().__init__()
         self._tray = tray
-        self._width = 600
+        self._width = 720
         self._height = 80
         self.setFixedSize(self._width, self._height)
         self.setWindowTitle("Preferences")
-        
-        # Textbox
-        self._textbot = QLineEdit(self)
-        self._textbot.move(20, 20)
-        self._textbot.resize(self._width - 300,20)
-        terminal, command = self._read_command()
-        self._textbot.setText(command)
+        validator=QtCore.QRegExp("[A-Za-z0-9- _]+")
+        self._nameValidator = QtGui.QRegExpValidator(validator)
+        name, terminal, command = self._read_command()
+
+        # Name textbox
+        self._nameTextbox = QLineEdit(self)
+        self._nameTextbox.move(20, 20)
+        self._nameTextbox.resize(80,20)
+        self._nameTextbox.setText(name)
+        self._nameTextbox.setMaxLength(15)
+        self._nameTextbox.setValidator(self._nameValidator)
+
+        # Command textbox
+        self._commandTextbox = QLineEdit(self)
+        self._commandTextbox.move(120, 20)
+        self._commandTextbox.resize(self._width - 415,20)
+        self._commandTextbox.setText(command)
         
         # Clear button
         self._clearButton = QPushButton("Clear", self)
@@ -35,7 +47,10 @@ class Preferences(QDialog):
 
         # Checkbox to run in terminal
         self._terminalCheckbox = QCheckBox("Launch in Terminal", self)
-        self._terminalCheckbox.setChecked(terminal)
+        if terminal == None:
+            self._terminalCheckbox.setChecked(True)
+        else:
+            self._terminalCheckbox.setChecked(terminal)
         self._terminalCheckbox.move(self._width-150,20)
        
         # Save button
@@ -51,6 +66,14 @@ class Preferences(QDialog):
         self._cancelButton.clicked.connect(self._cancel_command)
         self._cancelButton.setDefault(True)
 
+        # Name & Command text above fields
+        self._commandDesc = QLabel(self)
+        self._commandDesc.setText("Name")
+        self._commandDesc.move(20,3)
+        self._nameDesc = QLabel(self)
+        self._nameDesc.setText("Command")
+        self._nameDesc.move(120,3)
+
         self.activateWindow()
         self.exec_()
 
@@ -62,25 +85,38 @@ class Preferences(QDialog):
 
     # Save button action
     def _save_command(self):
-        if FileHandler().save_command(self._terminalCheckbox.isChecked(),
-                                      self._textbot.text()):
-            self._tray.refresh_UI()
-            self.close()
+        if re.search('[a-zA-Z]', self._commandTextbox.text()):
+            if FileHandler().save_command(self._nameTextbox.text(),
+                                        self._terminalCheckbox.isChecked(),
+                                        self._commandTextbox.text()):
+                self._tray.refresh_UI()
+                self.close()
+        else:
+            if FileHandler().save_command("",True,""):
+                self._tray.refresh_UI()
+                self.close()
 
 
     # Read commands from commands file
     def _read_command(self):
-        terminal, command = FileHandler().read_commands()
-        return terminal, command
+        name, terminal, command = FileHandler().read_commands()
+        return name, terminal, command
     
 
     # Clear button action
     def _clear_text(self):
-        self._textbot.clear()
+        self._commandTextbox.clear()
+        self._nameTextbox.clear()
+        # Unfortunately there is a bug in PyQt where clearing the textbox
+        # still shows some trash, so hide/show resolves the issue
+        self._commandTextbox.hide()
+        self._commandTextbox.show()
+        self._nameTextbox.hide()
+        self._nameTextbox.show()
 
 
     # Run button action
     def _run(self):
-        self._tray.run_command(self._textbot.text(),
+        self._tray.run_command(self._commandTextbox.text(),
                                self._terminalCheckbox.isChecked())
         self.activateWindow()

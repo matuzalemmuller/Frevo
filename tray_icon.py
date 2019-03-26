@@ -20,7 +20,7 @@ class TrayIcon(QApplication):
 
         # Creates menu and button actions
         self._menu = QMenu()
-        self._commandAction = QAction("Run command")
+        self._commandAction = QAction()
         self._commandAction.triggered.connect(self.run_command)
         self._preferenceAction = QAction("Preferences")
         self._preferenceAction.triggered.connect(self._configure)
@@ -48,9 +48,11 @@ class TrayIcon(QApplication):
     # Runs command when "Run command" is selected in sys tray
     def run_command(self, command=None, terminal=True):
         if command == None or command == False:
-            terminal, command = FileHandler().read_commands()
-            if command == "":
+            name, terminal, command = FileHandler().read_commands()
+            if name == None and terminal == None and command == None:
                 return
+            # if command == "":
+            #     return
         if terminal == True:
             terminal = app('Terminal')
             terminal.launch()
@@ -63,13 +65,24 @@ class TrayIcon(QApplication):
     # Refreshes sys tray options
     def refresh_UI(self):
         self._menu.clear()
-        if FileHandler().read_commands():
-            self._menu.addAction(self._commandAction)
-            self._menu.addSeparator()
-        else:
+        name, terminal, command = FileHandler().read_commands()
+        if name == None and terminal == None and command == None:
             if '_commandAction' in locals():
                 if self._commandAction:
                     self._menu.removeAction(self._commandAction)
+        elif name == "":
+            if command == "":
+                if '_commandAction' in locals():
+                    if self._commandAction:
+                        self._menu.removeAction(self._commandAction)
+            else:
+                self._commandAction.setText("Run command")
+                self._menu.addAction(self._commandAction)
+                self._menu.addSeparator()
+        else:
+            self._commandAction.setText(name)
+            self._menu.addAction(self._commandAction)
+            self._menu.addSeparator()
         
         self._menu.addAction(self._preferenceAction)
         self._menu.addAction(self._aboutAction)
