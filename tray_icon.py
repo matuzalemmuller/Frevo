@@ -51,8 +51,6 @@ class TrayIcon(QApplication):
             name, terminal, command = FileHandler().read_commands()
             if name == None and terminal == None and command == None:
                 return
-            # if command == "":
-            #     return
         if terminal == True:
             terminal = app('Terminal')
             terminal.launch()
