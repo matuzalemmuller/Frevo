@@ -10,24 +10,26 @@ class FileHandler():
             text_file = open(self._file, 'r')
             saved_command = text_file.readline()
             text_file.close()
-            terminal, command = saved_command.split(";", 1)
+            if saved_command == "":
+                return None, None, None
+            name, terminal, command = saved_command.split(";",2)
             if terminal == "True":
                 terminal_bool = True
             else:
                 terminal_bool = False
-            return terminal_bool, command
+            return name, terminal_bool, command
         except IOError as e:
             print(e)
-            return None, None
+            return None, None, None
     
 
     # Saves command
-    def save_command(self, terminal, command):
+    def save_command(self, name, terminal, command):
         try:
             if terminal == True:
-                preference = "True;" + command
+                preference = name + ";True;" + command
             else:
-                preference = "False;" + command
+                preference = name + ";False;" + command
             text_file = open(self._file, 'w+')
             text_file.write(preference)
             text_file.close()
