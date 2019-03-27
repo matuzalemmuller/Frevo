@@ -1,6 +1,9 @@
-env
 __pycache__
-run.sh
-settings.json
 .DS_Store
+.vscode
 commands.txt
+config
+build
+dist
+env
+run.sh
