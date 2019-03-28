@@ -108,12 +108,15 @@ class Preferences(QDialog):
             # Clear button
             clearButton.append(QPushButton("Clear", self))
             clearButton[i].setFixedWidth(70)
-            clearButton[i].clicked.connect(partial(self._clear_text, nameTextbox[i], commandTextbox[i]))
+            clearButton[i].clicked.connect(partial(self._clear_text,
+                                                   nameTextbox[i],
+                                                   commandTextbox[i]))
 
             # Run button
             runButton.append(QPushButton("Run", self))
             runButton[i].setFixedWidth(60)
-            runButton[i].clicked.connect(partial(self._run, commandTextbox[i], terminalCheckbox[i]))
+            runButton[i].clicked.connect(partial(self._run, commandTextbox[i],
+                                                 terminalCheckbox[i]))
 
             layout.append(QGridLayout())
             layout[i].addWidget(nameDesc[i], 1, 1)
