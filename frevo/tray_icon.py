@@ -20,8 +20,7 @@ class TrayIcon(QApplication):
 
         # Creates menu and button actions
         self._menu = QMenu()
-        self._commandAction = QAction()
-        self._commandAction.triggered.connect(self.run_command)
+        self._commandAction = []
         self._preferenceAction = QAction("Preferences")
         self._preferenceAction.triggered.connect(self._configure)
         self._aboutAction = QAction("About")
@@ -63,25 +62,17 @@ class TrayIcon(QApplication):
     # Refreshes sys tray options
     def refresh_UI(self):
         self._menu.clear()
-        name, terminal, command = ConfigHandler().read_commands()
-        if name == None and terminal == None and command == None:
-            if '_commandAction' in locals():
-                if self._commandAction:
-                    self._menu.removeAction(self._commandAction)
-        elif name == "":
-            if command == "":
-                if '_commandAction' in locals():
-                    if self._commandAction:
-                        self._menu.removeAction(self._commandAction)
-            else:
-                self._commandAction.setText("Run command")
-                self._menu.addAction(self._commandAction)
-                self._menu.addSeparator()
-        else:
-            self._commandAction.setText(name)
-            self._menu.addAction(self._commandAction)
-            self._menu.addSeparator()
-        
+        name_list, terminal_list, command_list = ConfigHandler().read_commands()
+
+        for i in range(len(command_list)):
+            if command_list[i] == "":
+                break
+            self._commandAction.append(QAction())
+            self._commandAction[i].triggered.connect(self.run_command)
+            self._commandAction[i].setText(name_list[i])
+            self._menu.addAction(self._commandAction[i])
+    
+        self._menu.addSeparator()
         self._menu.addAction(self._preferenceAction)
         self._menu.addAction(self._aboutAction)
         self._menu.addAction(self._quitAction)
