@@ -31,14 +31,29 @@ class Preferences(QDialog):
 
     # Save button action
     def _save_command(self):
-        if re.search('[a-zA-Z]', self._commandTextbox.text()):
-            if ConfigHandler().save_command(self._nameTextbox.text(),
-                                        self._terminalCheckbox.isChecked(),
-                                        self._commandTextbox.text()):
-                self._tray.refresh_UI()
+        widgets = self._windowLayout.children()
+        name_list = []
+        terminal_list = []
+        command_list = []
+
+        if len(widgets) > 1:
+            for i in range(len(widgets)-1):
+                grid = widgets[i]
+                name = grid.itemAtPosition(2,1).widget().text()
+                terminal = grid.itemAtPosition(2,5).widget().isChecked()
+                command = grid.itemAtPosition(2,2).widget().text()
+
+                if re.search('[a-zA-Z]', command):
+                    name_list.append(name)
+                    terminal_list.append(terminal)
+                    command_list.append(command + "\n")
+                else:
+                    continue
+            ConfigHandler().save_commands(name_list, terminal_list, command_list)
         else:
-            if ConfigHandler().save_command("",True,""):
-                self._tray.refresh_UI()
+            ConfigHandler().save_commands("",True,"")
+        
+        self._tray.refresh_UI()
         self.close()
 
 
@@ -78,6 +93,13 @@ class Preferences(QDialog):
         clearButton = []
         runButton = []
         terminalCheckbox = []
+
+        if command_list == None: # needs to be fixed
+            name_list = " "
+            command_list = " "
+            terminal_list = [True]
+        
+
         for i in range(len(command_list)):
             # Name & Command text above fields
             nameDesc.append(QLabel(self))
@@ -91,19 +113,18 @@ class Preferences(QDialog):
             nameTextbox[i].setMaxLength(15)
             nameTextbox[i].setMaximumWidth(80)
             nameTextbox[i].setValidator(self._nameValidator)
-            nameTextbox[i].setText(name_list[i])
+            if name_list[i] != " ":
+                nameTextbox[i].setText(name_list[i]) # needs to be fixed
 
             # Command textbox
             commandTextbox.append(QLineEdit(self))
             commandTextbox[i].resize(320,20)
-            commandTextbox[i].setText(command_list[i])
+            if command_list[i] != " ":
+                commandTextbox[i].setText(command_list[i]) # needs to be fixed
             
             # Checkbox to run in terminal
             terminalCheckbox.append(QCheckBox("Launch in Terminal", self))
-            if terminal_list[i] == None:
-                terminalCheckbox[i].setChecked(True)
-            else:
-                terminalCheckbox[i].setChecked(terminal_list[i])
+            terminalCheckbox[i].setChecked(terminal_list[i])
 
             # Clear button
             clearButton.append(QPushButton("Clear", self))
@@ -140,6 +161,7 @@ class Preferences(QDialog):
         # Save button
         saveButton = QPushButton("Save", self)
         saveButton.setFixedWidth(80)
+        saveButton.clicked.connect(self._save_command)
 
         closeLayout = QGridLayout()
         closeLayout.addWidget(cancelButton, 1, 1)

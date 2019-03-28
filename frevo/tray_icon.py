@@ -64,17 +64,18 @@ class TrayIcon(QApplication):
         self._menu.clear()
         name_list, terminal_list, command_list = ConfigHandler().read_commands()
 
-        for i in range(len(command_list)):
-            if command_list[i] == "":
-                break
-            if name_list[i] == "":
-                name =  "Command " + str(i+1)
-            else:
-                name = name_list[i]
-            self._commandAction.append(QAction())
-            self._commandAction[i].triggered.connect(self.run_command)
-            self._commandAction[i].setText(name)
-            self._menu.addAction(self._commandAction[i])
+        if command_list:
+            for i in range(len(command_list)):
+                if command_list[i] == "":
+                    break
+                if name_list[i] == "":
+                    name =  "Command " + str(i+1)
+                else:
+                    name = name_list[i]
+                self._commandAction.append(QAction())
+                self._commandAction[i].triggered.connect(self.run_command)
+                self._commandAction[i].setText(name)
+                self._menu.addAction(self._commandAction[i])
     
         self._menu.addSeparator()
         self._menu.addAction(self._preferenceAction)
