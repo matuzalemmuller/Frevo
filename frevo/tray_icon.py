@@ -67,9 +67,13 @@ class TrayIcon(QApplication):
         for i in range(len(command_list)):
             if command_list[i] == "":
                 break
+            if name_list[i] == "":
+                name =  "Command " + str(i+1)
+            else:
+                name = name_list[i]
             self._commandAction.append(QAction())
             self._commandAction[i].triggered.connect(self.run_command)
-            self._commandAction[i].setText(name_list[i])
+            self._commandAction[i].setText(name)
             self._menu.addAction(self._commandAction[i])
     
         self._menu.addSeparator()
