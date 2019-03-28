@@ -23,9 +23,9 @@ class ConfigHandler():
             terminal_list = []
             command_list = []
             for i in saved_command:
-                if saved_command == "":
-                    continue
                 print(i)
+                if i == "" or i == "\n":
+                    continue
                 name, terminal, command = i.split(";",2)
                 if terminal == "True":
                     terminal_bool = True
