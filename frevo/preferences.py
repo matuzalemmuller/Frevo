@@ -4,6 +4,8 @@ from PyQt5.QtWidgets import *
 from file_handler import ConfigHandler
 from PyQt5 import QtGui
 from PyQt5 import QtCore
+from functools import partial
+
 
 # Manages Preferences window
 class Preferences(QDialog):
@@ -15,7 +17,7 @@ class Preferences(QDialog):
         validator=QtCore.QRegExp("[A-Za-z0-9- _]+")
         self._nameValidator = QtGui.QRegExpValidator(validator)
 
-        self._windowLayout = self._createLayout()        
+        self._windowLayout = self._createLayout()     
         self.setLayout(self._windowLayout)
 
         self.activateWindow()
@@ -47,74 +49,80 @@ class Preferences(QDialog):
     
 
     # Clear button action
-    def _clear_text(self):
-        self._commandTextbox.clear()
-        self._nameTextbox.clear()
+    def _clear_text(self, name, command):
         # Unfortunately there is a bug in PyQt where clearing the textbox
-        # still shows some trash, so hide/show resolves the issue
-        self._commandTextbox.hide()
-        self._commandTextbox.show()
-        self._nameTextbox.hide()
-        self._nameTextbox.show()
+        # still shows some trash, so hiding/showing the field resolves the issue
+        name.clear()
+        command.clear()
+        name.hide()
+        name.show()
+        command.hide()
+        command.show()
+        command.setFocus()
 
 
     # Run button action
-    def _run(self):
-        self._tray.run_command(self._commandTextbox.text(),
-                               self._terminalCheckbox.isChecked())
+    def _run(self, command, terminal):
+        self._tray.run_command(command.text(),
+                               terminal.isChecked())
         self.activateWindow()
 
 
     def _createLayout(self):
         name_list, terminal_list, command_list = ConfigHandler().read_commands()
-
         layout = []
-
+        nameDesc = []
+        commandDesc = []
+        nameTextbox = []
+        commandTextbox = []
+        clearButton = []
+        runButton = []
+        terminalCheckbox = []
         for i in range(len(command_list)):
             # Name & Command text above fields
-            nameDesc = QLabel(self)
-            nameDesc.setText("Name")
-            commandDesc = QLabel(self)
-            commandDesc.setText("Command")
+            nameDesc.append(QLabel(self))
+            nameDesc[i].setText("Name")
+            commandDesc.append(QLabel(self))
+            commandDesc[i].setText("Command")
 
             # Name textbox
-            nameTextbox = QLineEdit(self)
-            nameTextbox.resize(80,20)
-            nameTextbox.setMaxLength(15)
-            nameTextbox.setMaximumWidth(80)
-            nameTextbox.setValidator(self._nameValidator)
-            nameTextbox.setText(name_list[i])
+            nameTextbox.append(QLineEdit(self))
+            nameTextbox[i].resize(80,20)
+            nameTextbox[i].setMaxLength(15)
+            nameTextbox[i].setMaximumWidth(80)
+            nameTextbox[i].setValidator(self._nameValidator)
+            nameTextbox[i].setText(name_list[i])
 
             # Command textbox
-            commandTextbox = QLineEdit(self)
-            commandTextbox.resize(320,20)
-            commandTextbox.setText(command_list[i])
+            commandTextbox.append(QLineEdit(self))
+            commandTextbox[i].resize(320,20)
+            commandTextbox[i].setText(command_list[i])
             
+            # Checkbox to run in terminal
+            terminalCheckbox.append(QCheckBox("Launch in Terminal", self))
+            if terminal_list[i] == None:
+                terminalCheckbox[i].setChecked(True)
+            else:
+                terminalCheckbox[i].setChecked(terminal_list[i])
+
             # Clear button
-            clearButton = QPushButton("Clear", self)
-            clearButton.setFixedWidth(70)
-            clearButton.clicked.connect(self._clear_text)
+            clearButton.append(QPushButton("Clear", self))
+            clearButton[i].setFixedWidth(70)
+            clearButton[i].clicked.connect(partial(self._clear_text, nameTextbox[i], commandTextbox[i]))
 
             # Run button
-            runButton = QPushButton("Run", self)
-            runButton.setFixedWidth(60)
-            runButton.clicked.connect(self._run)
-
-            # Checkbox to run in terminal
-            terminalCheckbox = QCheckBox("Launch in Terminal", self)
-            if terminal_list[i] == None:
-                terminalCheckbox.setChecked(True)
-            else:
-                terminalCheckbox.setChecked(terminal_list[i])
+            runButton.append(QPushButton("Run", self))
+            runButton[i].setFixedWidth(60)
+            runButton[i].clicked.connect(partial(self._run, commandTextbox[i], terminalCheckbox[i]))
 
             layout.append(QGridLayout())
-            layout[i].addWidget(nameDesc, 1, 1)
-            layout[i].addWidget(commandDesc, 1, 2)
-            layout[i].addWidget(nameTextbox, 2, 1)
-            layout[i].addWidget(commandTextbox, 2, 2)
-            layout[i].addWidget(clearButton, 2, 3)
-            layout[i].addWidget(runButton, 2, 4)
-            layout[i].addWidget(terminalCheckbox, 2, 5)
+            layout[i].addWidget(nameDesc[i], 1, 1)
+            layout[i].addWidget(commandDesc[i], 1, 2)
+            layout[i].addWidget(nameTextbox[i], 2, 1)
+            layout[i].addWidget(commandTextbox[i], 2, 2)
+            layout[i].addWidget(clearButton[i], 2, 3)
+            layout[i].addWidget(runButton[i], 2, 4)
+            layout[i].addWidget(terminalCheckbox[i], 2, 5)
             layout[i].setContentsMargins(10,5,10,5)
             layout[i].setHorizontalSpacing(10)
             layout[i].setVerticalSpacing(0)
@@ -130,17 +138,18 @@ class Preferences(QDialog):
         saveButton = QPushButton("Save", self)
         saveButton.setFixedWidth(80)
 
+        closeLayout = QGridLayout()
+        closeLayout.addWidget(cancelButton, 1, 1)
+        closeLayout.addWidget(saveButton, 1, 2)
+
         windowLayout = QGridLayout()
         windowLayout.setVerticalSpacing(0)
 
         for i in range(len((layout))):
             windowLayout.addLayout(layout[i],i,1)
 
-        closeLayout = QGridLayout()
-        closeLayout.addWidget(cancelButton, 1, 1)
-        closeLayout.addWidget(saveButton, 1, 2)
-
-        windowLayout.addLayout(closeLayout,windowLayout.rowCount()+1,1, QtCore.Qt.AlignCenter)
+        windowLayout.addLayout(closeLayout,windowLayout.rowCount()+1,1,
+                               QtCore.Qt.AlignCenter)
         windowLayout.setContentsMargins(10,5,5,5)
 
         return windowLayout
