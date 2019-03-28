@@ -17,31 +17,41 @@ class ConfigHandler():
     def read_commands(self):
         try:
             text_file = open(self._file, 'r')
-            saved_command = text_file.readline()
+            saved_command = text_file.readlines()
             text_file.close()
+            name_list = []
+            terminal_list = []
+            command_list = []
             if saved_command == "":
                 return None, None, None
-            name, terminal, command = saved_command.split(";",2)
-            if terminal == "True":
-                terminal_bool = True
-            else:
-                terminal_bool = False
-            return name, terminal_bool, command
+            for i in saved_command:
+                name, terminal, command = i.split(";",2)
+                if terminal == "True":
+                    terminal_bool = True
+                else:
+                    terminal_bool = False
+                name_list.append(name)
+                terminal_list.append(terminal_bool)
+                command_list.append(command)
+            return name_list, terminal_list, command_list
         except IOError as e:
             print(e)
             return None, None, None
     
 
     # Saves command
-    def save_command(self, name, terminal, command):
+    def save_commands(self, name_list, terminal_list, command_list):
         try:
-            if terminal == True:
-                preference = name + ";True;" + command
-            else:
-                preference = name + ";False;" + command
-            text_file = open(self._file, 'w+')
-            text_file.write(preference)
-            text_file.close()
+            if len(command_list) == 0:
+                return True
+            for i in range(len(command_list)):
+                if terminal_list[i] == True:
+                    command = name_list[i] + ";True;" + command_list[i] + "\n"
+                else:
+                    command = name_list[i] + ";False;" + command_list[i] + "\n"
+                text_file = open(self._file, 'a+')
+                text_file.write(command)
+                text_file.close()
             return True
         except IOError as e:
             print(e)
@@ -54,7 +64,6 @@ class ConfigHandler():
             return os.path.join(sys._MEIPASS, relative_path)
         return os.path.join(os.path.abspath('.'), relative_path)
     
-
 
     # Determines whether frevo is running as code or app
     def isApp(self):
