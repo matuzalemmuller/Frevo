@@ -23,7 +23,6 @@ class ConfigHandler():
             terminal_list = []
             command_list = []
             for i in saved_command:
-                print(i)
                 if i == "" or i == "\n":
                     continue
                 name, terminal, command = i.split(";",2)
