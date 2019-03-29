@@ -78,7 +78,7 @@ class Preferences(QDialog):
 
     # Run button action
     def _run(self, command, terminal):
-        if rcommand.text() == "":
+        if command.text() == "":
             return
         self._tray.run_command(command.text(),
                                terminal.isChecked())
