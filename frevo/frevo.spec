@@ -43,7 +43,7 @@ app = BUNDLE(coll,
                 'NSHighResolutionCapable': 'True',
                 'CFBundleDisplayName': 'Frevo',
                 'CFBundleDisplayName': 'Frevo',
-                'CFBundleShortVersionString': '0.3.0',
+                'CFBundleShortVersionString': '0.4.0',
                 'NSHumanReadableCopyright': '2019, Mat Muller'
              },
              )
