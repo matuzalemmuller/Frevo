@@ -47,7 +47,6 @@ class TrayIcon(QApplication):
 
     # Runs command when "Run command" is selected in sys tray
     def run_command(self, command=None, terminal=True):
-        print(command)
         if command == None or command == False:
             name, terminal, command = ConfigHandler().read_commands()
             if name == None and terminal == None and command == None:
