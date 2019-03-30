@@ -16,7 +16,7 @@ Run customizable commands in terminal directly from the Mac top bar!
 
 You can download the `.dmg` package from [here](https://github.com/matuzalemmuller/Frevo/releases/tag/v1.0.0).
 
-After dowloading the package, simply click in the `.dmg` file to mount in your Mac and move the file `Frevo.app` to the "Applications" folder.
+After dowloading the package, simply click in the `.dmg` file to mount it in your Mac and move the file `Frevo.app` to the "Applications" folder.
 
 To start Frevo when the system starts, go to "System Preferences" -> "Users & Groups" -> "Login Items" and add Frevo to the list.
 
