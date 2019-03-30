@@ -81,14 +81,41 @@ class Preferences(QDialog):
         self.activateWindow()
 
 
-    # Removes a command layout
+    # Removes command layout: first remove all widgets and then dissociate
+    # command layout from window layout
     def _remove_command(self, layout):
+        nameDesc = layout.itemAtPosition(1,1).widget()
+        nameDesc.setParent(None)
+        nameDesc.deleteLater()
+        commandDesc = layout.itemAtPosition(1,2).widget()
+        commandDesc.setParent(None)
+        commandDesc.deleteLater()
+        nameTextbox = layout.itemAtPosition(2,1).widget()
+        nameTextbox.setParent(None)
+        nameTextbox.deleteLater()
+        commandTextbox = layout.itemAtPosition(2,2).widget()
+        commandTextbox.setParent(None)
+        commandTextbox.deleteLater()
+        clearButton = layout.itemAtPosition(2,3).widget()
+        clearButton.setParent(None)
+        clearButton.deleteLater()
+        runButton = layout.itemAtPosition(2,4).widget()
+        runButton.setParent(None)
+        runButton.deleteLater()
+        terminalCheckbox = layout.itemAtPosition(2,5).widget()
+        terminalCheckbox.setParent(None)
+        terminalCheckbox.deleteLater()
+        removeButton = layout.itemAtPosition(2,6).widget()
+        removeButton.setParent(None)
+        removeButton.deleteLater()
+
         layout.setParent(None)
         layout.deleteLater()
 
         self.update()
         self.repaint()
 
+        # If there's only a close widget, maintain size
         if self._windowLayout.count() == 1:
             self._windowLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
 
@@ -108,6 +135,7 @@ class Preferences(QDialog):
             layout.append(self._create_command_layout(name_list[i],
                                                       command_list[i],
                                                       terminal_list[i]))
+                                                      
         closeLayout = self._create_close_layout()
         
         windowLayout = QGridLayout()            # Combines all layouts in a
