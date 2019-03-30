@@ -1,10 +1,9 @@
 import sys
 import re
+from functools import partial
+from PyQt5 import QtGui, QtCore
 from PyQt5.QtWidgets import *
 from file_handler import ConfigHandler
-from PyQt5 import QtGui
-from PyQt5 import QtCore
-from functools import partial
 
 
 # Manages Preferences window
@@ -17,7 +16,8 @@ class Preferences(QDialog):
         validator=QtCore.QRegExp("[A-Za-z0-9- _]+")
         self._nameValidator = QtGui.QRegExpValidator(validator)
 
-        self._windowLayout = self._createLayout()     
+        self._windowLayout = self._createLayout()
+        self._windowLayout.setSizeConstraint(QLayout.SetFixedSize)
         self.setLayout(self._windowLayout)
 
         self.activateWindow()
@@ -29,7 +29,8 @@ class Preferences(QDialog):
         self.close()
 
 
-    # Save button action
+    # Save button action: scans all commands and names and saved them to
+    # commands file. If no none is provided, command is saved as "Command N"
     def _save_command(self):
         widgets = self._windowLayout.children()
         name_list = []
@@ -63,17 +64,12 @@ class Preferences(QDialog):
         return name, terminal, command
     
 
-    # Clear button action
+    # Clear button action: clears selected name and command
     def _clear_text(self, name, command):
-        # Unfortunately there is a bug in PyQt where clearing the textbox
-        # still shows some trash, so hiding/showing the field resolves the issue
         name.clear()
         command.clear()
-        name.hide()
-        name.show()
-        command.hide()
-        command.show()
         command.setFocus()
+        self.repaint()
 
 
     # Run button action
@@ -85,24 +81,37 @@ class Preferences(QDialog):
         self.activateWindow()
 
 
+    # Removes a command layout
+    def _remove_command(self, layout):
+        layout.setParent(None)
+        layout.deleteLater()
+
+        self.update()
+        self.repaint()
+
+        if self._windowLayout.count() == 1:
+            self._windowLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
+
+
+    # Creates the command layouts + close layout
     def _createLayout(self):
         name_list, terminal_list, command_list = ConfigHandler().read_commands()
         layout = []
 
-        if command_list == None: # needs to be fixed
+        if command_list == None:
             name_list = " "
             command_list = " "
             terminal_list = [True]
 
+        # Creates list of command layouts
         for i in range(len(command_list)):
             layout.append(self._create_command_layout(name_list[i],
                                                       command_list[i],
                                                       terminal_list[i]))
-
         closeLayout = self._create_close_layout()
         
-        windowLayout = QGridLayout()
-        windowLayout.setVerticalSpacing(0)
+        windowLayout = QGridLayout()            # Combines all layouts in a
+        windowLayout.setVerticalSpacing(0)      # single layout
         for i in range(len((layout))):
             windowLayout.addLayout(layout[i],i,1)
         windowLayout.addLayout(closeLayout,windowLayout.rowCount()+1,1,
@@ -112,7 +121,14 @@ class Preferences(QDialog):
         return windowLayout
 
     
+    # Creates command layout
+    # * nameDesc, commandDesc = QLabel
+    # * nameTextbox, commandTextbox = QLineEdit
+    # * terminalCheckbox = QCheckBox
+    # * clearButton, runButton, removeButton = QPushButton
     def _create_command_layout(self, name_list, command_list, terminal_list):
+        layout = QGridLayout()
+        
         # Name & Command text above fields
         nameDesc = QLabel(self)
         nameDesc.setText("Name")
@@ -151,7 +167,12 @@ class Preferences(QDialog):
         runButton.clicked.connect(partial(self._run, commandTextbox,
                                                 terminalCheckbox))
 
-        layout = QGridLayout()
+        # Remove button
+        removeButton = QPushButton("Remove", self)
+        removeButton.setFixedWidth(80)
+        removeButton.clicked.connect(partial(self._remove_command,
+                                             layout))       
+
         layout.addWidget(nameDesc, 1, 1)
         layout.addWidget(commandDesc, 1, 2)
         layout.addWidget(nameTextbox, 2, 1)
@@ -159,6 +180,7 @@ class Preferences(QDialog):
         layout.addWidget(clearButton, 2, 3)
         layout.addWidget(runButton, 2, 4)
         layout.addWidget(terminalCheckbox, 2, 5)
+        layout.addWidget(removeButton, 2, 6)
         layout.setContentsMargins(10,5,10,5)
         layout.setHorizontalSpacing(10)
         layout.setVerticalSpacing(0)
@@ -167,6 +189,8 @@ class Preferences(QDialog):
         return layout
     
 
+    # Creates close layout:
+    # * cancelButton, saveButton, addButton = QPushButton
     def _create_close_layout(self):
         # Cancel button
         cancelButton = QPushButton("Cancel", self)
@@ -192,8 +216,13 @@ class Preferences(QDialog):
         return closeLayout
     
 
+    # Adds command layout to interface: removes close layout, adds command
+    # layout and then re-add close layout
     def _add_command_layout(self):
-        # Delete bottom button layout
+        if self._windowLayout.count() == 1:
+            self._windowLayout.setSizeConstraint(QLayout.SetFixedSize)
+
+        # Deletes current close layout
         widgets = self._windowLayout.children()
         buttons = widgets[-1]
         cancel = buttons.itemAtPosition(1,5).widget()
@@ -213,5 +242,4 @@ class Preferences(QDialog):
 
         self._windowLayout.addLayout(layout,len(widgets),1)
         self._windowLayout.addLayout(closeLayout,len(widgets)+1,1)
-
         self._windowLayout.update()
