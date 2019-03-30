@@ -5,7 +5,8 @@ import sys
 class ConfigHandler():
     # Creates file if it doesn't exist
     def __init__(self):
-        self._file = self.resourcePath("config/commands.txt")
+        self._file = self.resourcePath(os.environ['HOME']+
+                        "/Library/Application Support/Frevo/commands.txt")
         try:
             os.mkdir(self._file.rsplit('/',1)[0])
             config_file = open(self._file, 'w+')
