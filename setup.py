@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
    name='frevo',
-   version='0.5',
+   version='1.0.0',
    description='Run terminal commands directly from your Mac top bar',
    url='https://gitlab.com/matuzalemmuller/frevo',
    license='GNU GPLv3',
