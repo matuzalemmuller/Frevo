@@ -7,6 +7,7 @@ from file_handler import ConfigHandler
 # Detects if OSX is in dark mode to choose icon color
 mode=NSUserDefaults.standardUserDefaults().stringForKey_('AppleInterfaceStyle')
 
+# Checks if code is running as an app to define icon paths
 if ConfigHandler().isApp():
     if mode == "Dark":
         icon = "icon/logo-white.png"
