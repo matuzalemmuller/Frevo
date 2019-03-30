@@ -39,7 +39,7 @@ class TrayIcon(QApplication):
         Preferences(self)
 
 
-   # Launches Preferences when "Preferences" is selected in sys tray
+   # Launches About when "About" is selected in sys tray
     @QtCore.pyqtSlot()
     def _about(self):
         About()
@@ -51,8 +51,8 @@ class TrayIcon(QApplication):
             name, terminal, command = ConfigHandler().read_commands()
             if name == None and terminal == None and command == None:
                 return
-        if terminal == True:
-            terminal = app('Terminal')
+        if terminal == True:                # If True, command runs in
+            terminal = app('Terminal')      # open terminal
             terminal.launch()
             terminal.activate()
             terminal.do_script(command)
@@ -60,7 +60,7 @@ class TrayIcon(QApplication):
             os.system(command)
 
 
-    # Refreshes sys tray options
+    # Refreshes sys tray options: reads command from file and adds to tray menu
     def refresh_UI(self):
         self._menu.clear()
         self._commandAction = []
@@ -76,7 +76,10 @@ class TrayIcon(QApplication):
                 else:
                     name = name_list[i]
                 self._commandAction.append(QAction())
-                self._commandAction[i].triggered.connect(partial(self.run_command, command_list[i], terminal_list[i]))
+                self._commandAction[i].triggered.connect(partial(
+                                                            self.run_command,
+                                                            command_list[i],
+                                                            terminal_list[i]))
                 self._commandAction[i].setText(name)
                 self._menu.addAction(self._commandAction[i])
     

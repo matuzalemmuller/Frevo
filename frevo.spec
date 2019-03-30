@@ -1,12 +1,10 @@
 # -*- mode: python -*-
-
 block_cipher = None
-
-a = Analysis(['frevo.py'],
+a = Analysis(['frevo/__init__.py'],
              pathex=['frevo'],
              binaries=[],
              datas=[
-                    ('../icon/*.png','icon')
+                    ('icon/*.png','icon')
                 ],
              hiddenimports=[],
              hookspath=[],
@@ -37,13 +35,13 @@ coll = COLLECT(exe,
                name='Frevo')
 app = BUNDLE(coll,
              name='Frevo.app',
-             icon='../icon/icon.icns',
+             icon='icon/icon.icns',
              info_plist={
                 'LSUIElement': '1',
                 'NSHighResolutionCapable': 'True',
                 'CFBundleDisplayName': 'Frevo',
                 'CFBundleDisplayName': 'Frevo',
-                'CFBundleShortVersionString': '0.4.0',
+                'CFBundleShortVersionString': '1.0.0',
                 'NSHumanReadableCopyright': '2019, Mat Muller'
              },
              )

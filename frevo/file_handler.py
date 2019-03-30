@@ -3,6 +3,7 @@ import sys
 
 # Save and read commands from commands file
 class ConfigHandler():
+    # Creates file if it doesn't exist
     def __init__(self):
         self._file = self.resourcePath("config/commands.txt")
         try:
@@ -42,7 +43,7 @@ class ConfigHandler():
             return None, None, None
     
 
-    # Saves command
+    # Saves commands
     def save_commands(self, name_list, terminal_list, command_list):
         try:
             open(self._file, 'w').close()
@@ -63,14 +64,15 @@ class ConfigHandler():
             return False
     
 
-    # Handles path when running as an .app
+    # Handles path when running as a Mac app
     def resourcePath(self,relative_path):
         if hasattr(sys, '_MEIPASS'):
             return os.path.join(sys._MEIPASS, relative_path)
         return os.path.join(os.path.abspath('.'), relative_path)
     
 
-    # Determines whether frevo is running as code or app
+    # Determines whether Frevo is running as code or app based on folder
+    # used by Frevo when running as Mac app
     def isApp(self):
         if hasattr(sys, '_MEIPASS'):
             return True

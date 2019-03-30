@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5 import QtCore
 
 
+# Shows information about project and developer
 class About(QDialog):
 
     def __init__(self):
@@ -28,7 +29,7 @@ class About(QDialog):
         self.layout.addWidget(self._developer)
 
         # Version
-        self._developer = QLabel("v0.4")
+        self._developer = QLabel("v1.0.0")
         self._developer.setOpenExternalLinks(True)
         self._developer.setAlignment(QtCore.Qt.AlignCenter)
         self.layout.addWidget(self._developer)
