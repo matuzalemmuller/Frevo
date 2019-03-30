@@ -29,7 +29,7 @@ class About(QDialog):
         self.layout.addWidget(self._developer)
 
         # Version
-        self._developer = QLabel("v0.5")
+        self._developer = QLabel("v1.0.0")
         self._developer.setOpenExternalLinks(True)
         self._developer.setAlignment(QtCore.Qt.AlignCenter)
         self.layout.addWidget(self._developer)
