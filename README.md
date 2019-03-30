@@ -10,7 +10,7 @@ Run customizable commands in terminal directly from the Mac top bar!
 
 ![](https://i.imgur.com/S787zXy.png)
 
-![](https://i.imgur.com/iQs3YBL.gif)
+![](https://media.giphy.com/media/5wFIpb7YYnHnpNuDic/giphy.gif)
 
 ## Installation
 
