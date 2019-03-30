@@ -16,7 +16,7 @@ Run customizable commands in terminal directly from the Mac top bar!
 
 ## Contribution
 
-Want to collaborate? Luckily I have a good job, but not everyone had the same opportunities that I had. I will be happy if you donate to a [charity](https://www.globalgiving.org/) as it will motivate me to work on more projects so I know that it will be helping someone.
+Want to collaborate? Luckily I have a good job, but not everyone has the same opportunities that I had. I will be happy if you donate to a [charity](https://www.globalgiving.org/) as it will motivate me to work on more projects so I know that I will be helping someone.
 
 
 Also, feel free to fork and/or star the project! 
