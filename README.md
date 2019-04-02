@@ -31,6 +31,6 @@ Also, feel free to fork and/or star the project!
 
 ## Next steps
 
-The unpacked app has around 65 MB, which is not a lot considering the super computers that we have nowadays. However, some system tray apps have less than 10 MB. The reason why Frevo takes more space is because I had to embeed the PyQt libraries used by the app so it could run in multiple versions of OSX without having to manually install a specific version of Python and/or PyQt. Just the PyQt libraries take around 60 MB of space, which justifies the size of the app.
+The unpacked app has around 65 MB, which is not a lot considering the super computers that we have nowadays. However, some system tray apps have less than 10 MB. The reason why Frevo takes more space is because I had to embed the PyQt libraries used by the app so it could run in multiple versions of OSX without having to manually install a specific version of Python and/or PyQt. Just the PyQt libraries take around 60 MB of space, which justifies the size of the app.
 
 The next step for this project is converting it to a full Swift/Objective C app for Mac and porting it to Linux and other platforms.
