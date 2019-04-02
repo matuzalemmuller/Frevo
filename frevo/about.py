@@ -29,12 +29,12 @@ class About(QDialog):
         self.layout.addWidget(self._developer)
 
         # Version
-        self._developer = QLabel("v1.0.0")
+        self._developer = QLabel("v1.0.1")
         self._developer.setOpenExternalLinks(True)
         self._developer.setAlignment(QtCore.Qt.AlignCenter)
         self.layout.addWidget(self._developer)
 
         self.setLayout(self.layout)
 
-        self.activateWindow()
         self.exec_()
+        self.activateWindow()

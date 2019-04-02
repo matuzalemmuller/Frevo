@@ -20,8 +20,8 @@ class Preferences(QDialog):
         self._windowLayout.setSizeConstraint(QLayout.SetFixedSize)
         self.setLayout(self._windowLayout)
 
-        self.activateWindow()
         self.exec_()
+        self.activateWindow()
 
 
     # Cancel button action
