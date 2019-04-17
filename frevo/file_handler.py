@@ -1,7 +1,7 @@
 import os
 import sys
 
-# Save and read commands from commands file
+# Saves and reads commands from commands file
 class ConfigHandler():
     # Creates file if it doesn't exist
     def __init__(self):
@@ -15,7 +15,7 @@ class ConfigHandler():
             pass
 
     
-    # Reads command from commands file
+    # Reads commands from commands file
     def read_commands(self):
         try:
             text_file = open(self._file, 'r')
@@ -72,7 +72,7 @@ class ConfigHandler():
         return os.path.join(os.path.abspath('.'), relative_path)
     
 
-    # Determines whether Frevo is running as code or app based on folder
+    # Determines whether Frevo is running as code or an app based on folder
     # used by Frevo when running as Mac app
     def isApp(self):
         if hasattr(sys, '_MEIPASS'):

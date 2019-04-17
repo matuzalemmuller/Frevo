@@ -29,8 +29,8 @@ class Preferences(QDialog):
         self.close()
 
 
-    # Save button action: scans all commands and names and saved them to
-    # commands file. If no none is provided, command is saved as "Command N"
+    # Save button action: scans all commands & names and saved them to the
+    # commands file. If no name is provided, command is saved as "Command N"
     def _save_command(self):
         widgets = self._windowLayout.children()
         name_list = []
@@ -58,7 +58,7 @@ class Preferences(QDialog):
         self.close()
 
 
-    # Read commands from commands file
+    # Reads commands from commands file
     def _read_command(self):
         name, terminal, command = ConfigHandler().read_commands()
         return name, terminal, command
@@ -81,7 +81,7 @@ class Preferences(QDialog):
         self.activateWindow()
 
 
-    # Removes command layout: first remove all widgets and then dissociate
+    # Removes command layout: first removes all widgets and then dissociates
     # command layout from window layout
     def _remove_command(self, layout):
         nameDesc = layout.itemAtPosition(1,1).widget()
@@ -120,7 +120,7 @@ class Preferences(QDialog):
             self._windowLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
 
 
-    # Creates the command layouts + close layout
+    # Creates the commands and close layouts
     def _createLayout(self):
         name_list, terminal_list, command_list = ConfigHandler().read_commands()
         layout = []
