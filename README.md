@@ -1,6 +1,6 @@
 # Frevo
 
-*Hosted at [GitLab](https://gitlab.com/matuzalemmuller/frevo) and mirrored to [GitHub](https://github.com/matuzalemmuller/frevo).*
+*Hosted at [GitHub](https://github.com/matuzalemmuller/frevo) and mirrored to [GitLab](https://gitlab.com/matuzalemmuller/frevo).*
 
 ## Description
 
