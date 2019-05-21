@@ -20,12 +20,9 @@ After dowloading the package, simply click in the `.dmg` file to mount it in you
 
 To start Frevo when the system starts, go to "System Preferences" -> "Users & Groups" -> "Login Items" and add Frevo to the list.
 
-## Contribution
+## Contributing
 
-Want to contribute? Not everyone has the same opportunities that I had to study and work, so I will be happy if you donate to a [charity](https://www.globalgiving.org/) as it will motivate me to work on more open-source projects as I know that I will be helping someone.
-
-
-Also, feel free to fork and/or star the project! 
+Feel free to fork and/or star the project. 
 
 ----
 
