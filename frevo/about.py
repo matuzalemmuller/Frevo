@@ -14,7 +14,7 @@ class About(QDialog):
 
         # Project name
         self._git = QLabel("2019 <a href=\""+
-                           "https://gitlab.com/matuzalemmuller/frevo\""+
+                           "https://github.com/matuzalemmuller/Frevo\""+
                            ">Frevo</a>")
         self._git.setOpenExternalLinks(True)
         self._git.setAlignment(QtCore.Qt.AlignCenter)
