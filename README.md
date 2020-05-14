@@ -1,9 +1,5 @@
 # Frevo
 
-*Hosted at [GitHub](https://github.com/matuzalemmuller/frevo) and mirrored to [GitLab](https://gitlab.com/matuzalemmuller/frevo).*
-
-## Description
-
 Run customizable commands in terminal directly from the Mac top bar!
 
 <img src="https://i.imgur.com/ymocru0.png" width="555" height="216" />
